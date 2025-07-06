@@ -99,7 +99,11 @@ func TestCreateAndGetGroup(t *testing.T) {
 			}
 			tt.input.Receivers = receiverIDs
 
-			resp, err := client.Post(groupURI, "application/json", strings.NewReader(tt.input.toPayload()))
+			resp, err := client.Post(
+				groupURI,
+				"application/json",
+				strings.NewReader(tt.input.toPayload()),
+			)
 			assert.NilError(t, err)
 			assert.Equal(t, resp.StatusCode, http.StatusOK)
 
@@ -223,7 +227,11 @@ func TestCreateInvalidGroup(t *testing.T) {
 
 	for testName, tt := range tests {
 		t.Run(testName, func(t *testing.T) {
-			resp, err := client.Post(groupURI, "application/json", strings.NewReader(tt.input.toPayload()))
+			resp, err := client.Post(
+				groupURI,
+				"application/json",
+				strings.NewReader(tt.input.toPayload()),
+			)
 			assert.NilError(t, err)
 			assert.Equal(t, resp.StatusCode, http.StatusBadRequest)
 
@@ -269,7 +277,11 @@ func TestToggleGroup(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, group.Enabled, false, "group should be disabled")
 	afterDisableUpdatedAt := time.Time(group.UpdatedAt.Date)
-	assert.Check(t, !afterDisableUpdatedAt.Equal(originalUpdatedAt), "updated time should be updated after disable")
+	assert.Check(
+		t,
+		!afterDisableUpdatedAt.Equal(originalUpdatedAt),
+		"updated time should be updated after disable",
+	)
 
 	err = toggleGroup(client, groupID, true)
 	assert.NilError(t, err)
@@ -277,7 +289,11 @@ func TestToggleGroup(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, group.Enabled, true, "group should be enabled")
 	afterEnableUpdatedAt := time.Time(group.UpdatedAt.Date)
-	assert.Check(t, !afterEnableUpdatedAt.Equal(afterDisableUpdatedAt), "updated time should be updated after enable")
+	assert.Check(
+		t,
+		!afterEnableUpdatedAt.Equal(afterDisableUpdatedAt),
+		"updated time should be updated after enable",
+	)
 }
 
 func TestGetNonExistentGroup(t *testing.T) {

@@ -129,7 +129,8 @@ func NewSearchCmd() *cobra.Command {
 	searchCmd.Flags().String("package", "", "Package of the event")
 	searchCmd.Flags().String("success", "", "Success of the event")
 	searchCmd.Flags().String("event-receiver-id", "", "Event receiver id of the event")
-	searchCmd.Flags().String("fields", "id name version release platform_id package success", "Space delimited list of fields, or 'all' for all user fields")
+	searchCmd.Flags().
+		String("fields", "id name version release platform_id package success", "Space delimited list of fields, or 'all' for all user fields")
 	searchCmd.Flags().String("jsonpath", "", "JSONPath expression to apply to output")
 	searchCmd.Flags().String("url", "http://localhost:8042", "EPR base url")
 	searchCmd.Flags().Bool("dry-run", false, "do a dry run of the command")

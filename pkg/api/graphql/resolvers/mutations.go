@@ -28,7 +28,9 @@ func (r *MutationResolver) CreateEvent(args struct{ Event epr.EventInput }) (gra
 	return event.ID, nil
 }
 
-func (r *MutationResolver) CreateEventReceiver(args struct{ EventReceiver epr.EventReceiverInput }) (graphql.ID, error) {
+func (r *MutationResolver) CreateEventReceiver(
+	args struct{ EventReceiver epr.EventReceiverInput },
+) (graphql.ID, error) {
 	eventReceiver, err := epr.CreateEventReceiver(r.msgProducer, r.Connection, args.EventReceiver)
 	if err != nil {
 		return "", eprErrors.SanitizeError(err)
@@ -36,15 +38,23 @@ func (r *MutationResolver) CreateEventReceiver(args struct{ EventReceiver epr.Ev
 	return eventReceiver.ID, nil
 }
 
-func (r *MutationResolver) CreateEventReceiverGroup(args struct{ EventReceiverGroup epr.EventReceiverGroupInput }) (graphql.ID, error) {
-	eventReceiverGroup, err := epr.CreateEventReceiverGroup(r.msgProducer, r.Connection, args.EventReceiverGroup)
+func (r *MutationResolver) CreateEventReceiverGroup(
+	args struct{ EventReceiverGroup epr.EventReceiverGroupInput },
+) (graphql.ID, error) {
+	eventReceiverGroup, err := epr.CreateEventReceiverGroup(
+		r.msgProducer,
+		r.Connection,
+		args.EventReceiverGroup,
+	)
 	if err != nil {
 		return "", eprErrors.SanitizeError(err)
 	}
 	return eventReceiverGroup.ID, nil
 }
 
-func (r *MutationResolver) SetEventReceiverGroupEnabled(args struct{ ID graphql.ID }) (graphql.ID, error) {
+func (r *MutationResolver) SetEventReceiverGroupEnabled(
+	args struct{ ID graphql.ID },
+) (graphql.ID, error) {
 	err := storage.SetEventReceiverGroupEnabled(r.Connection.Client, args.ID, true)
 	if err != nil {
 		slog.Error("error setting event receiver group enabled", "error", err, "id", args.ID)
@@ -54,7 +64,9 @@ func (r *MutationResolver) SetEventReceiverGroupEnabled(args struct{ ID graphql.
 	return args.ID, nil
 }
 
-func (r *MutationResolver) SetEventReceiverGroupDisabled(args struct{ ID graphql.ID }) (graphql.ID, error) {
+func (r *MutationResolver) SetEventReceiverGroupDisabled(
+	args struct{ ID graphql.ID },
+) (graphql.ID, error) {
 	err := storage.SetEventReceiverGroupEnabled(r.Connection.Client, args.ID, false)
 	if err != nil {
 		slog.Error("error setting event receiver group disabled", "error", err, "id", args.ID)

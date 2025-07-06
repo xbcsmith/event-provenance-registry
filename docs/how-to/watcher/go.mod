@@ -7,7 +7,7 @@ go 1.21.0
 require github.com/sassoftware/event-provenance-registry v0.0.0-20230901192240-3d330b648418
 
 require (
-	github.com/Shopify/sarama v1.38.1 // indirect
+	github.com/IBM/sarama v1.38.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/eapache/go-resiliency v1.3.0 // indirect
 	github.com/eapache/go-xerial-snappy v0.0.0-20230111030713-bf00bc1b83b6 // indirect

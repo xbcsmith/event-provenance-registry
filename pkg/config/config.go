@@ -95,7 +95,10 @@ func New(opts ...Options) (*Config, error) {
 }
 
 // WithStorage returns an option that sets the storage config
-func WithStorage(host, user, pass, sslMode, name string, port, maxConnections, idleConnections, connectionLife int) Options {
+func WithStorage(
+	host, user, pass, sslMode, name string,
+	port, maxConnections, idleConnections, connectionLife int,
+) Options {
 	return func(cfg *Config) error {
 		cfg.Storage = &StorageConfig{
 			Host:            host,

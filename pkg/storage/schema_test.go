@@ -114,7 +114,10 @@ func TestEventReceiverGroup(t *testing.T) {
 
 	// Test input and output
 	if eventReceiverGroup.ID != "01HGKNVZ8XSYR429Z2HV2A31S9" {
-		t.Errorf("Expected ID to be '01HGKNVZ8XSYR429Z2HV2A31S9', but got '%s'", eventReceiverGroup.ID)
+		t.Errorf(
+			"Expected ID to be '01HGKNVZ8XSYR429Z2HV2A31S9', but got '%s'",
+			eventReceiverGroup.ID,
+		)
 	}
 
 	// Negative test case

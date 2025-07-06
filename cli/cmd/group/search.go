@@ -55,7 +55,10 @@ func runSearchEventReceiverGroup(_ *cobra.Command, _ []string) error {
 		params["type"] = typeStr
 	}
 
-	fields, err := common.ProcessSearchFields(viper.GetStringSlice("fields"), &storage.EventReceiverGroup{})
+	fields, err := common.ProcessSearchFields(
+		viper.GetStringSlice("fields"),
+		&storage.EventReceiverGroup{},
+	)
 	if err != nil {
 		return err
 	}
@@ -101,7 +104,8 @@ func NewSearchCmd() *cobra.Command {
 	searchCmd.Flags().String("name", "", "Name of the Event Receiver Group")
 	searchCmd.Flags().String("version", "", "Version of the Event Receiver Group")
 	searchCmd.Flags().String("type", "", "Type of the Event Receiver Group")
-	searchCmd.Flags().String("fields", "id name version type", "Space delimited list of fields, or 'all' for all user fields")
+	searchCmd.Flags().
+		String("fields", "id name version type", "Space delimited list of fields, or 'all' for all user fields")
 	searchCmd.Flags().String("jsonpath", "", "JSONPath expression to apply to output")
 	searchCmd.Flags().String("url", "http://localhost:8042", "EPR base url")
 	searchCmd.Flags().Bool("dry-run", false, "do a dry run of the command")

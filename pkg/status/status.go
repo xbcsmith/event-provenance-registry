@@ -21,24 +21,24 @@ import (
 // Health reports the links to the health monitors
 type Health struct {
 	Readiness types.JSONText `json:"readiness" yaml:"readiness"`
-	Liveness  types.JSONText `json:"liveness" yaml:"liveness"`
+	Liveness  types.JSONText `json:"liveness"  yaml:"liveness"`
 }
 
 // Status reports the characteristics of the Service
 type Status struct {
-	Service   *Version    `json:"service" yaml:"service"`
-	Uptime    string      `json:"uptime" yaml:"uptime"`
-	Debug     bool        `json:"debug" yaml:"debug"`
-	Health    *Health     `json:"health" yaml:"health"`
+	Service   *Version    `json:"service"    yaml:"service"`
+	Uptime    string      `json:"uptime"     yaml:"uptime"`
+	Debug     bool        `json:"debug"      yaml:"debug"`
+	Health    *Health     `json:"health"     yaml:"health"`
 	StartTime time.Time   `json:"start_time" yaml:"start_time"`
-	Host      string      `json:"host" yaml:"host"`
-	Port      string      `json:"port" yaml:"port"`
-	MetaData  interface{} `json:"metadata" yaml:"metadata"`
+	Host      string      `json:"host"       yaml:"host"`
+	Port      string      `json:"port"       yaml:"port"`
+	MetaData  interface{} `json:"metadata"   yaml:"metadata"`
 }
 
 // Metadata struct for info about service-specific fields
 type Metadata struct {
-	Verbose   bool   `json:"verbose" yaml:"verbose"`
+	Verbose   bool   `json:"verbose"   yaml:"verbose"`
 	Resources string `json:"resources" yaml:"resources"`
 }
 
