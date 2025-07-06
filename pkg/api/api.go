@@ -22,7 +22,11 @@ import (
 )
 
 // Initialize starts the database, kafka message producer, middleware, and endpoints
-func Initialize(db *storage.Database, msgProducer message.TopicProducer, cfg *config.ServerConfig) (*chi.Mux, error) {
+func Initialize(
+	db *storage.Database,
+	msgProducer message.TopicProducer,
+	cfg *config.ServerConfig,
+) (*chi.Mux, error) {
 	if cfg == nil {
 		return nil, fmt.Errorf("no config provided")
 	}
@@ -39,7 +43,9 @@ func Initialize(db *storage.Database, msgProducer message.TopicProducer, cfg *co
 		requestTimer(),
 		requestCounter(),
 		securityHeaders(),
-		render.SetContentType(render.ContentTypeJSON), // set content-type headers as application/json
+		render.SetContentType(
+			render.ContentTypeJSON,
+		), // set content-type headers as application/json
 		middleware.Logger,       // log api request calls
 		middleware.Compress(5),  // compress results, mostly gzipping assets and json
 		middleware.StripSlashes, // match paths with a trailing slash, strip it, and continue routing through the mux
@@ -133,7 +139,8 @@ func Initialize(db *storage.Database, msgProducer message.TopicProducer, cfg *co
 			MaxAge:         300, // Maximum value not ignored by any of major browsers
 		})
 		// Add some middleware to our router
-		r.Use(crs.Handler,
+		r.Use(
+			crs.Handler,
 			render.SetContentType(render.ContentTypeHTML), // set content-type headers as text/html
 			middleware.Logger,       // log api request calls
 			middleware.Compress(5),  // compress results, mostly gzipping assets and json

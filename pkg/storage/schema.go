@@ -14,16 +14,16 @@ import (
 
 // Event type represents an event with various properties and a relationship to an event receiver.
 type Event struct {
-	ID          graphql.ID `json:"id" gorm:"type:varchar(255);primary_key;not null"`
-	Name        string     `json:"name" gorm:"type:varchar(255);not null"`
-	Version     string     `json:"version" gorm:"type:varchar(255);not null"`
-	Release     string     `json:"release" gorm:"type:varchar(255);not null"`
+	ID          graphql.ID `json:"id"          gorm:"type:varchar(255);primary_key;not null"`
+	Name        string     `json:"name"        gorm:"type:varchar(255);not null"`
+	Version     string     `json:"version"     gorm:"type:varchar(255);not null"`
+	Release     string     `json:"release"     gorm:"type:varchar(255);not null"`
 	PlatformID  string     `json:"platform_id" gorm:"type:varchar(255);not null"`
-	Package     string     `json:"package" gorm:"type:varchar(255);not null"`
+	Package     string     `json:"package"     gorm:"type:varchar(255);not null"`
 	Description string     `json:"description" gorm:"type:varchar(255);not null"`
-	Payload     types.JSON `json:"payload" gorm:"not null"`
+	Payload     types.JSON `json:"payload"     gorm:"not null"`
 
-	Success   bool       `json:"success" gorm:"not null"`
+	Success   bool       `json:"success"    gorm:"not null"`
 	CreatedAt types.Time `json:"created_at" gorm:"type:timestamptz; not null; default:CURRENT_TIMESTAMP"`
 
 	EventReceiverID graphql.ID `json:"event_receiver_id" gorm:"type:varchar(255);not null"`
@@ -32,25 +32,25 @@ type Event struct {
 
 // EventReceiver type represents an event receiver with various properties such as ID, name, type, version, etc...
 type EventReceiver struct {
-	ID          graphql.ID `json:"id" gorm:"type:varchar(255);primary_key;not null"`
-	Name        string     `json:"name" gorm:"type:varchar(255);not null"`
-	Type        string     `json:"type" gorm:"type:varchar(255);not null"`
-	Version     string     `json:"version" gorm:"type:varchar(255);not null"`
+	ID          graphql.ID `json:"id"          gorm:"type:varchar(255);primary_key;not null"`
+	Name        string     `json:"name"        gorm:"type:varchar(255);not null"`
+	Type        string     `json:"type"        gorm:"type:varchar(255);not null"`
+	Version     string     `json:"version"     gorm:"type:varchar(255);not null"`
 	Description string     `json:"description" gorm:"type:varchar(255);not null"`
 
-	Schema      types.JSON `json:"schema" gorm:"not null"`
+	Schema      types.JSON `json:"schema"      gorm:"not null"`
 	Fingerprint string     `json:"fingerprint" gorm:"type:varchar(255);not null"`
-	CreatedAt   types.Time `json:"created_at" gorm:"type:timestamptz;not null;default:CURRENT_TIMESTAMP"`
+	CreatedAt   types.Time `json:"created_at"  gorm:"type:timestamptz;not null;default:CURRENT_TIMESTAMP"`
 }
 
 // EventReceiverGroup represents a group of event receivers with various properties.
 type EventReceiverGroup struct {
-	ID          graphql.ID `json:"id" gorm:"type:varchar(255);primary_key;not null"`
-	Name        string     `json:"name" gorm:"type:varchar(255);not null"`
-	Type        string     `json:"type" gorm:"type:varchar(255);not null"`
-	Version     string     `json:"version" gorm:"type:varchar(255);not null"`
+	ID          graphql.ID `json:"id"          gorm:"type:varchar(255);primary_key;not null"`
+	Name        string     `json:"name"        gorm:"type:varchar(255);not null"`
+	Type        string     `json:"type"        gorm:"type:varchar(255);not null"`
+	Version     string     `json:"version"     gorm:"type:varchar(255);not null"`
 	Description string     `json:"description" gorm:"type:varchar(255);not null"`
-	Enabled     bool       `json:"enabled" gorm:"not null"`
+	Enabled     bool       `json:"enabled"     gorm:"not null"`
 
 	EventReceiverIDs []graphql.ID `json:"event_receiver_ids" gorm:"-"`
 

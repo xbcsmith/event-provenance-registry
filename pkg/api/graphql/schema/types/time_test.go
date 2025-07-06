@@ -32,7 +32,12 @@ func TestUnmarshalGraphQL(t *testing.T) {
 	err = time.UnmarshalGraphQL(invalidInput)
 	assert.Assert(t, nil != err)
 	expectedError := fmt.Errorf("wrong type for Time: %T", invalidInput)
-	assert.Equal(t, expectedError.Error(), err.Error(), "expected error message does not match results")
+	assert.Equal(
+		t,
+		expectedError.Error(),
+		err.Error(),
+		"expected error message does not match results",
+	)
 }
 
 func TestMarshalJSON(t *testing.T) {

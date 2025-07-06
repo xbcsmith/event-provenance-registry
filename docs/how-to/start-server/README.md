@@ -122,6 +122,7 @@ mutation {
       description: "a fake event receiver group"
       event_receiver_ids: ["01HKNDR10NVBA8V7G0V3C15JA6"]
       type: "test"
+      enabled: true
     }
   )
 }

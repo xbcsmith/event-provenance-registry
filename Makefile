@@ -28,7 +28,7 @@ Q = $(if $(filter 1,$V),,@)
 M = $(shell printf "\033[34;1mEvent Provenance Registry ▶\033[0m")
 
 .PHONY: all
-all: megalint test $(BINARY) $(BINARY)-arm64 $(BINARY)-darwin $(BINARY)-darwin-arm64  ## Build all the binary types
+all: lint test $(BINARY) $(BINARY)-arm64 $(BINARY)-darwin $(BINARY)-darwin-arm64  ## Build all the binary types
 
 .PHONY: linux
 linux: test $(BINARY) ## build linux binary
@@ -76,9 +76,13 @@ install-darwin-arm64: darwin-arm64 ;$(info $(M) installing epr-server arm64...) 
 list-updates: ;$(info $(M) listing available go library updates...) @ ## List available go library updates
 	$Q	go list -u -f '{{if (and (not (or .Main .Indirect)) .Update)}}{{.Path}}: {{.Version}} -> {{.Update.Version}}{{end}}' -m all 2> /dev/null
 
-.PHONY: megalint
-megalint: ; $(info $(M) running golangci-lint...) @ ## Runs golangci-lint with a lot of switches
-	$Q golangci-lint run --config ./golangci-megalint-config.yaml
+.PHONY: lint
+lint: ; $(info $(M) running golangci-lint...) @ ## Runs golangci-lint with a lot of switches
+	$Q golangci-lint run --config .golangci.yaml
+
+.PHONY: fmt
+fmt: ; $(info $(M) running golangci-lint fmt...) @ ## Runs golangci-lint fmt ./...
+	$Q golangci-lint fmt --config .golangci.yaml ./...
 
 .PHONY: test
 test: ; $(info $(M) running tests...) @ ## Runs go test ./...

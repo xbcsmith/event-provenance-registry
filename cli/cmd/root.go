@@ -90,6 +90,7 @@ func init() {
 
 	rootCmd.Flags().String("url", "http://localhost:8042", "EPR base url")
 
-	rootCmd.Flags().StringVar(&cfgFile, "config", "", "config file (default is $XDG_CONFIG_HOME/epr/epr.yaml)")
+	rootCmd.Flags().
+		StringVar(&cfgFile, "config", "", "config file (default is $XDG_CONFIG_HOME/epr/epr.yaml)")
 	rootCmd.Flags().Bool("debug", false, "Enable debugging statements")
 }

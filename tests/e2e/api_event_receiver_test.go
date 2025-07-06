@@ -39,7 +39,11 @@ func TestCreateAndGetReceiver(t *testing.T) {
 
 	for testName, tt := range tests {
 		t.Run(testName, func(t *testing.T) {
-			resp, err := client.Post(receiverURI, "application/json", strings.NewReader(tt.input.toPayload()))
+			resp, err := client.Post(
+				receiverURI,
+				"application/json",
+				strings.NewReader(tt.input.toPayload()),
+			)
 			assert.NilError(t, err)
 			assert.Equal(t, resp.StatusCode, http.StatusOK)
 
@@ -136,7 +140,11 @@ func TestCreateInvalidReceiver(t *testing.T) {
 
 	for testName, tt := range tests {
 		t.Run(testName, func(t *testing.T) {
-			resp, err := client.Post(receiverURI, "application/json", strings.NewReader(tt.input.toPayload()))
+			resp, err := client.Post(
+				receiverURI,
+				"application/json",
+				strings.NewReader(tt.input.toPayload()),
+			)
 			assert.NilError(t, err)
 			assert.Equal(t, resp.StatusCode, http.StatusBadRequest)
 

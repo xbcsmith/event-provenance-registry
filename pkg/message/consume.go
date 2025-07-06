@@ -9,7 +9,7 @@ import (
 	"log/slog"
 	"sync"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"github.com/sassoftware/event-provenance-registry/pkg/utils"
 )
 
@@ -22,7 +22,11 @@ type ConsumerController struct {
 }
 
 // NewConsumerController creates a new ConsumerController
-func NewConsumerController(kafkaVersion, groupID string, kafkaPeers, topics []string, worker ConsumerWorker) (*ConsumerController, error) {
+func NewConsumerController(
+	kafkaVersion, groupID string,
+	kafkaPeers, topics []string,
+	worker ConsumerWorker,
+) (*ConsumerController, error) {
 	consumer := newConsumer(worker)
 
 	group, err := CreateConsumerGroup(kafkaVersion, groupID, kafkaPeers)
@@ -38,10 +42,22 @@ func NewConsumerController(kafkaVersion, groupID string, kafkaPeers, topics []st
 }
 
 // NewSecureConsumerController creates a new ConsumerController with security flags invoked.
-func NewSecureConsumerController(kafkaVersion, groupID, saslUser, saslPass string, tls bool, kafkaPeers, topics []string, worker ConsumerWorker) (*ConsumerController, error) {
+func NewSecureConsumerController(
+	kafkaVersion, groupID, saslUser, saslPass string,
+	tls bool,
+	kafkaPeers, topics []string,
+	worker ConsumerWorker,
+) (*ConsumerController, error) {
 	consumer := newConsumer(worker)
 
-	group, err := CreateSecureConsumerGroup(kafkaVersion, groupID, saslUser, saslPass, tls, kafkaPeers)
+	group, err := CreateSecureConsumerGroup(
+		kafkaVersion,
+		groupID,
+		saslUser,
+		saslPass,
+		tls,
+		kafkaPeers,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +71,12 @@ func NewSecureConsumerController(kafkaVersion, groupID, saslUser, saslPass strin
 
 // NewConsumerControllerEnv creates a new ConsumerController with security flags invoked based on SASL_USERNAME and SASL_PASSWORD
 // envirionment variables. If SASL_USERNAME and SASL_PASSWORD are set, a ConsumerController with SASL enabled will be returned.
-func NewConsumerControllerEnv(kafkaVersion, groupID string, tls bool, kafkaPeers, topics []string, worker ConsumerWorker) (*ConsumerController, error) {
+func NewConsumerControllerEnv(
+	kafkaVersion, groupID string,
+	tls bool,
+	kafkaPeers, topics []string,
+	worker ConsumerWorker,
+) (*ConsumerController, error) {
 	consumer := newConsumer(worker)
 
 	group, err := CreateConsumerGroupEnv(kafkaVersion, groupID, tls, kafkaPeers)
@@ -114,11 +135,14 @@ func (c *Consumer) Cleanup(sarama.ConsumerGroupSession) error {
 
 // ConsumeClaim must start a consumer loop of ConsumerGroupClaim's Messages(). Each message received is handled by
 // the Worker function on the consumer. Messages that process with an error are marked as read and will not be reprocessed.
-func (c *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
+func (c *Consumer) ConsumeClaim(
+	session sarama.ConsumerGroupSession,
+	claim sarama.ConsumerGroupClaim,
+) error {
 	// NOTE:
 	// Do not move the code below to a goroutine.
 	// The `ConsumeClaim` itself is called within a goroutine, see:
-	// https://github.com/Shopify/sarama/blob/master/consumer_group.go#L27-L29
+	// https://github.com/IBM/sarama/blob/master/consumer_group.go#L27-L29
 	for message := range claim.Messages() {
 		err := c.Worker(message)
 		session.MarkMessage(message, "")
@@ -133,7 +157,13 @@ func (c *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim saram
 
 // ConsumeMessages given a ConsumerGroup and a Consumer, process each message in the consumer group using the consumer
 // provided. You will need to close the consumer group when you are done processing.
-func ConsumeMessages(ctx context.Context, topics []string, group sarama.ConsumerGroup, cons Consumer, wg *sync.WaitGroup) {
+func ConsumeMessages(
+	ctx context.Context,
+	topics []string,
+	group sarama.ConsumerGroup,
+	cons Consumer,
+	wg *sync.WaitGroup,
+) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -158,14 +188,21 @@ func ConsumeMessages(ctx context.Context, topics []string, group sarama.Consumer
 
 // CreateConsumerGroup returns a new ConsumerGroup, ready to consume things. Calls through to CreateSecureConsumerGroup
 // without any security pararmeters enabled.
-func CreateConsumerGroup(kafkaVersion, groupID string, kafkaPeers []string) (sarama.ConsumerGroup, error) {
+func CreateConsumerGroup(
+	kafkaVersion, groupID string,
+	kafkaPeers []string,
+) (sarama.ConsumerGroup, error) {
 	return CreateSecureConsumerGroup(kafkaVersion, groupID, "", "", false, kafkaPeers)
 }
 
 // CreateSecureConsumerGroup creates a ConsumerGroup with Kafka security options enabled. Providing saslUser and saslPassword
 // allows the consumer to authenticate with a SASL enabled kafka cluster. If left empty, a normal consumer will be created.
 // The previous two options imply TLS. TLS can be set separately in cases where TLS is required but auth is not.
-func CreateSecureConsumerGroup(kafkaVersion, groupID, saslUser, saslPass string, tls bool, kafkaPeers []string) (sarama.ConsumerGroup, error) {
+func CreateSecureConsumerGroup(
+	kafkaVersion, groupID, saslUser, saslPass string,
+	tls bool,
+	kafkaPeers []string,
+) (sarama.ConsumerGroup, error) {
 	saramaCfg, err := NewConfig(kafkaVersion)
 	if err != nil {
 		return nil, err
@@ -202,7 +239,11 @@ func CreateSecureConsumerGroup(kafkaVersion, groupID, saslUser, saslPass string,
 // returned, else a normal consumer group will be returned. If SASL is enabled SASL_MECHANISM must be set to SCRAM or PLAIN
 // Supported SASL_MECHANISMS: SCRAM, PLAIN
 // Future    SASL_MECHANISMS: OAUTH2
-func CreateConsumerGroupEnv(kafkaVersion, groupID string, tls bool, kafkaPeers []string) (sarama.ConsumerGroup, error) {
+func CreateConsumerGroupEnv(
+	kafkaVersion, groupID string,
+	tls bool,
+	kafkaPeers []string,
+) (sarama.ConsumerGroup, error) {
 	saramaCfg, err := NewConfigEnv(kafkaVersion)
 	if err != nil {
 		return nil, err

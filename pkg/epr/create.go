@@ -134,7 +134,11 @@ func (g EventReceiverGroupInput) Validate() error {
 	return err
 }
 
-func CreateEvent(msgProducer message.TopicProducer, db *storage.Database, input EventInput) (*storage.Event, error) {
+func CreateEvent(
+	msgProducer message.TopicProducer,
+	db *storage.Database,
+	input EventInput,
+) (*storage.Event, error) {
 	err := input.Validate()
 	if err != nil {
 		return nil, eprErrors.InvalidInputError{Msg: err.Error()}
@@ -173,7 +177,11 @@ func CreateEvent(msgProducer message.TopicProducer, db *storage.Database, input 
 	return event, nil
 }
 
-func CreateEventReceiver(msgProducer message.TopicProducer, db *storage.Database, input EventReceiverInput) (*storage.EventReceiver, error) {
+func CreateEventReceiver(
+	msgProducer message.TopicProducer,
+	db *storage.Database,
+	input EventReceiverInput,
+) (*storage.EventReceiver, error) {
 	err := input.Validate()
 	if err != nil {
 		return nil, eprErrors.InvalidInputError{Msg: err.Error()}
@@ -199,7 +207,11 @@ func CreateEventReceiver(msgProducer message.TopicProducer, db *storage.Database
 	return receiver, nil
 }
 
-func CreateEventReceiverGroup(msgProducer message.TopicProducer, db *storage.Database, input EventReceiverGroupInput) (*storage.EventReceiverGroup, error) {
+func CreateEventReceiverGroup(
+	msgProducer message.TopicProducer,
+	db *storage.Database,
+	input EventReceiverGroupInput,
+) (*storage.EventReceiverGroup, error) {
 	err := input.Validate()
 	if err != nil {
 		return nil, eprErrors.InvalidInputError{Msg: err.Error()}

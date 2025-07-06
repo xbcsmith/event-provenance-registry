@@ -1,0 +1,19 @@
+---
+version: "2"
+linters:
+  default: standard
+  disable:
+    - errcheck
+    - staticcheck
+formatters:
+  # Enable specific formatter.
+  # Default: [] (uses standard Go formatting)
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+    - golines
+run:
+  timeout: 30m
+  concurrency: 4

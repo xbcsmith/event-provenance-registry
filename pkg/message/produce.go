@@ -8,7 +8,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"github.com/sassoftware/event-provenance-registry/pkg/utils"
 )
 
