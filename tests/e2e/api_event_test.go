@@ -102,7 +102,11 @@ func TestCreateAndGetEvent(t *testing.T) {
 			assert.NilError(t, err)
 			tt.input.EventReceiverID = receiverID
 
-			resp, err := client.Post(eventURI, "application/json", strings.NewReader(tt.input.toPayload()))
+			resp, err := client.Post(
+				eventURI,
+				"application/json",
+				strings.NewReader(tt.input.toPayload()),
+			)
 			assert.NilError(t, err)
 			assert.Equal(t, resp.StatusCode, http.StatusOK)
 
@@ -288,7 +292,11 @@ func TestCreateEventWithInvalidInput(t *testing.T) {
 
 	for testName, tt := range tests {
 		t.Run(testName, func(t *testing.T) {
-			resp, err := client.Post(eventURI, "application/json", strings.NewReader(tt.input.toPayload()))
+			resp, err := client.Post(
+				eventURI,
+				"application/json",
+				strings.NewReader(tt.input.toPayload()),
+			)
 			assert.NilError(t, err)
 			assert.Equal(t, resp.StatusCode, http.StatusBadRequest)
 

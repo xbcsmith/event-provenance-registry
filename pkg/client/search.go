@@ -12,7 +12,11 @@ import (
 )
 
 // Search searches for the given queryFor based on params
-func (c *Client) Search(operation string, params map[string]interface{}, fields []string) (string, error) {
+func (c *Client) Search(
+	operation string,
+	params map[string]interface{},
+	fields []string,
+) (string, error) {
 	endpoint, err := c.getGraphQLEndpointQuery()
 	if err != nil {
 		return "", err
@@ -32,7 +36,10 @@ func (c *Client) Search(operation string, params map[string]interface{}, fields 
 	return content, nil
 }
 
-func (c *Client) SearchEvents(params map[string]interface{}, fields []string) ([]storage.Event, error) {
+func (c *Client) SearchEvents(
+	params map[string]interface{},
+	fields []string,
+) ([]storage.Event, error) {
 	response, err := c.Search(eventsQuery, params, fields)
 	if err != nil {
 		return nil, err
@@ -53,7 +60,10 @@ func (c *Client) SearchEvents(params map[string]interface{}, fields []string) ([
 	return respObj.Data.Events, nil
 }
 
-func (c *Client) SearchEventReceivers(params map[string]interface{}, fields []string) ([]storage.EventReceiver, error) {
+func (c *Client) SearchEventReceivers(
+	params map[string]interface{},
+	fields []string,
+) ([]storage.EventReceiver, error) {
 	response, err := c.Search(eventReceiversQuery, params, fields)
 	if err != nil {
 		return nil, err
@@ -66,13 +76,19 @@ func (c *Client) SearchEventReceivers(params map[string]interface{}, fields []st
 
 	// Check for presence of errors in respObj from searching eventReceiver
 	if respObj.Errors != nil {
-		return nil, fmt.Errorf("when searching for eventReceiver returned: errors: %s ", respObj.Errors)
+		return nil, fmt.Errorf(
+			"when searching for eventReceiver returned: errors: %s ",
+			respObj.Errors,
+		)
 	}
 
 	return respObj.Data.EventReceivers, nil
 }
 
-func (c *Client) SearchEventReceiverGroups(params map[string]interface{}, fields []string) ([]storage.EventReceiverGroup, error) {
+func (c *Client) SearchEventReceiverGroups(
+	params map[string]interface{},
+	fields []string,
+) ([]storage.EventReceiverGroup, error) {
 	response, err := c.Search(eventReceiverGroupsQuery, params, fields)
 	if err != nil {
 		return nil, err
@@ -85,14 +101,21 @@ func (c *Client) SearchEventReceiverGroups(params map[string]interface{}, fields
 
 	// Check for presence of errors in respObj from searching eventReceiverGroups
 	if respObj.Errors != nil {
-		return nil, fmt.Errorf("when searching for eventReceiverGroup returned: errors: %s ", respObj.Errors)
+		return nil, fmt.Errorf(
+			"when searching for eventReceiverGroup returned: errors: %s ",
+			respObj.Errors,
+		)
 	}
 
 	return respObj.Data.EventReceiverGroups, nil
 }
 
 // GetCurlSearch
-func (c *Client) GetCurlSearch(operation string, params map[string]interface{}, fields []string) (string, error) {
+func (c *Client) GetCurlSearch(
+	operation string,
+	params map[string]interface{},
+	fields []string,
+) (string, error) {
 	endpoint, err := c.getGraphQLEndpointQuery()
 	if err != nil {
 		return "", err
@@ -104,5 +127,9 @@ func (c *Client) GetCurlSearch(operation string, params map[string]interface{}, 
 		return "", err
 	}
 
-	return fmt.Sprintf(`curl -X POST -H "content-type:application/json" -d '%s' %s`, enc, endpoint), nil
+	return fmt.Sprintf(
+		`curl -X POST -H "content-type:application/json" -d '%s' %s`,
+		enc,
+		endpoint,
+	), nil
 }

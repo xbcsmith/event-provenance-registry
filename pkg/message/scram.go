@@ -13,7 +13,7 @@ import (
 var SHA512 scram.HashGeneratorFcn = sha512.New
 
 // SCRAMClient client for doing SCRAM authentication through sarama. This implementation was taken from the sarama examples
-// here: https://github.com/Shopify/sarama/blob/master/examples/sasl_scram_client/scram_client.go
+// here: https://github.com/IBM/sarama/blob/master/examples/sasl_scram_client/scram_client.go
 type SCRAMClient struct {
 	*scram.Client
 	*scram.ClientConversation

@@ -27,8 +27,14 @@ type Contract interface {
 	ModifyEventReceiverGroup(erg *storage.EventReceiverGroup) (string, error)
 	Search(operation string, params map[string]interface{}, fields []string) (string, error)
 	SearchEvents(params map[string]interface{}, fields []string) ([]storage.Event, error)
-	SearchEventReceivers(params map[string]interface{}, fields []string) ([]storage.EventReceiver, error)
-	SearchEventReceiverGroups(params map[string]interface{}, fields []string) ([]storage.EventReceiverGroup, error)
+	SearchEventReceivers(
+		params map[string]interface{},
+		fields []string,
+	) ([]storage.EventReceiver, error)
+	SearchEventReceiverGroups(
+		params map[string]interface{},
+		fields []string,
+	) ([]storage.EventReceiverGroup, error)
 	CheckReadiness() (bool, error)
 	CheckLiveness() (bool, error)
 	CheckStatus() (string, error)
@@ -92,13 +98,33 @@ func (c *Client) doReq(reqType string, endpoint string, payload []byte) (string,
 	case http.MethodGet:
 		req, err = http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	case http.MethodPost:
-		req, err = http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewReader(payload))
+		req, err = http.NewRequestWithContext(
+			ctx,
+			http.MethodPost,
+			endpoint,
+			bytes.NewReader(payload),
+		)
 	case http.MethodDelete:
-		req, err = http.NewRequestWithContext(ctx, http.MethodDelete, endpoint, bytes.NewReader(payload))
+		req, err = http.NewRequestWithContext(
+			ctx,
+			http.MethodDelete,
+			endpoint,
+			bytes.NewReader(payload),
+		)
 	case http.MethodPatch:
-		req, err = http.NewRequestWithContext(ctx, http.MethodPatch, endpoint, bytes.NewReader(payload))
+		req, err = http.NewRequestWithContext(
+			ctx,
+			http.MethodPatch,
+			endpoint,
+			bytes.NewReader(payload),
+		)
 	case http.MethodPut:
-		req, err = http.NewRequestWithContext(ctx, http.MethodPut, endpoint, bytes.NewReader(payload))
+		req, err = http.NewRequestWithContext(
+			ctx,
+			http.MethodPut,
+			endpoint,
+			bytes.NewReader(payload),
+		)
 	default:
 		return "", fmt.Errorf("request type %s not supported", reqType)
 	}
@@ -124,7 +150,13 @@ func (c *Client) doReq(reqType string, endpoint string, payload []byte) (string,
 		if err != nil {
 			return string(content), fmt.Errorf("request returned status code %d", resp.StatusCode)
 		}
-		return string(content), fmt.Errorf("request returned status code %d (%s)", resp.StatusCode, r.Errors)
+		return string(
+				content,
+			), fmt.Errorf(
+				"request returned status code %d (%s)",
+				resp.StatusCode,
+				r.Errors,
+			)
 	}
 
 	return string(content), nil

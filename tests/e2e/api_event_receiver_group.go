@@ -84,7 +84,10 @@ func getGroup(client *http.Client, id string) (storage.EventReceiverGroup, error
 	}
 
 	if len(body.Errors) > 0 {
-		return storage.EventReceiverGroup{}, fmt.Errorf("group resp body had errors: %v", body.Errors)
+		return storage.EventReceiverGroup{}, fmt.Errorf(
+			"group resp body had errors: %v",
+			body.Errors,
+		)
 	}
 	if len(body.Data) > 1 {
 		return storage.EventReceiverGroup{}, fmt.Errorf("found multiple groups by id %s", id)

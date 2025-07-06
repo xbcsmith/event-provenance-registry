@@ -20,7 +20,7 @@ var (
 
 // Version struct for storing Version info
 type Version struct {
-	Name    string `json:"name" yaml:"name"`
+	Name    string `json:"name"    yaml:"name"`
 	Version string `json:"version" yaml:"version"`
 	Release string `json:"release" yaml:"release"`
 }
@@ -32,7 +32,12 @@ func GetVersion() string {
 
 // GetVersionJSON returns version info as JSON
 func GetVersionJSON() string {
-	return fmt.Sprintf(`{"name": "%s", "version": "%s", "release": "%s"}`, AppName, AppVersion, AppRelease)
+	return fmt.Sprintf(
+		`{"name": "%s", "version": "%s", "release": "%s"}`,
+		AppName,
+		AppVersion,
+		AppRelease,
+	)
 }
 
 // NewVersion returns a populated Version struct

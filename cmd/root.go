@@ -191,7 +191,12 @@ func run(_ *cobra.Command, _ []string) error {
 		return nil
 	})
 
-	slog.Info(fmt.Sprintf("connect to http://%s/api/v1/graphql for GraphQL playground", cfg.Server.GetSrvAddr()))
+	slog.Info(
+		fmt.Sprintf(
+			"connect to http://%s/api/v1/graphql for GraphQL playground",
+			cfg.Server.GetSrvAddr(),
+		),
+	)
 
 	return errGroup.Wait()
 }
@@ -265,7 +270,8 @@ func init() {
 	rootCmd.Flags().String("db", "postgres://localhost:5432", "database connection string")
 	rootCmd.Flags().String("tls-cert", "", "Path to the cert for the server")
 	rootCmd.Flags().String("tls-key", "", "Path to the server key")
-	rootCmd.Flags().StringVar(&cfgFile, "config", "", "config file (default is $XDG_CONFIG_HOME/epr/epr.yaml)")
+	rootCmd.Flags().
+		StringVar(&cfgFile, "config", "", "config file (default is $XDG_CONFIG_HOME/epr/epr.yaml)")
 	rootCmd.Flags().Bool("json-logging", false, "Format log messages as JSON.")
 	rootCmd.Flags().Bool("debug", false, "Enable debugging statements")
 }

@@ -54,7 +54,11 @@ func (s *Server) UpdateGroup() http.HandlerFunc {
 		var err error
 		if patch.Enabled != nil {
 			slog.Info("set group enabled", "groupID", id, "enabled", patch.Enabled)
-			err = storage.SetEventReceiverGroupEnabled(s.DBConnector.Client, graphql.ID(id), *patch.Enabled)
+			err = storage.SetEventReceiverGroupEnabled(
+				s.DBConnector.Client,
+				graphql.ID(id),
+				*patch.Enabled,
+			)
 		}
 		handleResponse(w, r, id, err)
 	}

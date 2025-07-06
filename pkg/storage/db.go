@@ -42,7 +42,15 @@ func New(host, user, pass, sslMode, database string, port int) (*Database, error
 	if sslMode != "" {
 		sslMode = fmt.Sprintf("sslmode=%s", sslMode)
 	}
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d %v TimeZone=EST", host, user, pass, database, port, sslMode)
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%d %v TimeZone=EST",
+		host,
+		user,
+		pass,
+		database,
+		port,
+		sslMode,
+	)
 	client, err := gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: glog, PrepareStmt: true})
 	if err != nil {
 		return nil, fmt.Errorf("unable to connect to database. err %s", err)
@@ -138,7 +146,9 @@ func FindEventReceiverByID(tx *gorm.DB, id graphql.ID) ([]EventReceiver, error) 
 		return nil, err
 	}
 	if len(receivers) == 0 {
-		return nil, eprErrors.MissingObjectError{Msg: fmt.Sprintf("eventReceiver with id %s not found", id)}
+		return nil, eprErrors.MissingObjectError{
+			Msg: fmt.Sprintf("eventReceiver with id %s not found", id),
+		}
 	}
 	if len(receivers) > 1 {
 		return nil, fmt.Errorf("found multiple eventReceivers with id %s", id)
@@ -156,16 +166,22 @@ func FindEventReceiver(tx *gorm.DB, er map[string]any) ([]EventReceiver, error) 
 	return eventReceivers, nil
 }
 
-func CreateEventReceiverGroup(tx *gorm.DB, eventReceiverGroup EventReceiverGroup) (*EventReceiverGroup, error) {
+func CreateEventReceiverGroup(
+	tx *gorm.DB,
+	eventReceiverGroup EventReceiverGroup,
+) (*EventReceiverGroup, error) {
 	eventReceiverGroup.ID = graphql.ID(utils.NewULIDAsString())
 
 	// create our EventReceiverGroupToEventReceivers
 	eventReceiverGroupToEventReceivers := []*EventReceiverGroupToEventReceiver{}
 	for _, eventReceiverID := range eventReceiverGroup.EventReceiverIDs {
-		eventReceiverGroupToEventReceivers = append(eventReceiverGroupToEventReceivers, &EventReceiverGroupToEventReceiver{
-			EventReceiverID:      eventReceiverID,
-			EventReceiverGroupID: eventReceiverGroup.ID,
-		})
+		eventReceiverGroupToEventReceivers = append(
+			eventReceiverGroupToEventReceivers,
+			&EventReceiverGroupToEventReceiver{
+				EventReceiverID:      eventReceiverID,
+				EventReceiverGroupID: eventReceiverGroup.ID,
+			},
+		)
 	}
 
 	// create both EventReceiverGroup and EventReceiverGroupToEventReceiver in a single transaction
@@ -175,13 +191,15 @@ func CreateEventReceiverGroup(tx *gorm.DB, eventReceiverGroup EventReceiverGroup
 			return pgError(result.Error)
 		}
 
-		result = tx.CreateInBatches(eventReceiverGroupToEventReceivers, len(eventReceiverGroupToEventReceivers))
+		result = tx.CreateInBatches(
+			eventReceiverGroupToEventReceivers,
+			len(eventReceiverGroupToEventReceivers),
+		)
 		if result.Error != nil {
 			return pgError(result.Error)
 		}
 		return nil
 	})
-
 	if err != nil {
 		return nil, err
 	}
@@ -194,7 +212,9 @@ func FindEventReceiverGroupByID(tx *gorm.DB, id graphql.ID) ([]EventReceiverGrou
 		return nil, err
 	}
 	if len(groups) == 0 {
-		return nil, eprErrors.MissingObjectError{Msg: fmt.Sprintf("eventReceiverGroup with id %s not found", id)}
+		return nil, eprErrors.MissingObjectError{
+			Msg: fmt.Sprintf("eventReceiverGroup with id %s not found", id),
+		}
 	}
 	if len(groups) > 1 {
 		return nil, fmt.Errorf("found multiple eventReceiverGroups with id %s", id)
@@ -296,7 +316,10 @@ func FindTriggeredEventReceiverGroups(tx *gorm.DB, event Event) ([]EventReceiver
 	eventReceiverGroups := []EventReceiverGroup{}
 	for _, triggeredEventReceiverGroup := range triggeredEventReceiverGroups {
 		var eventReceiverIDs []graphql.ID
-		err := json.Unmarshal([]byte(triggeredEventReceiverGroup.EventReceiverIDs.JSON), &eventReceiverIDs)
+		err := json.Unmarshal(
+			[]byte(triggeredEventReceiverGroup.EventReceiverIDs.JSON),
+			&eventReceiverIDs,
+		)
 		if err != nil {
 			return nil, err
 		}

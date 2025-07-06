@@ -17,17 +17,39 @@ type GraphQLRequest struct {
 
 // NewGraphQLSearchRequest creates a new GraphQLRequest
 // operation can be events or event_receivers or event_receiver_groups
-func NewGraphQLSearchRequest(operation string, params map[string]interface{}, fields []string) *GraphQLRequest {
+func NewGraphQLSearchRequest(
+	operation string,
+	params map[string]interface{},
+	fields []string,
+) *GraphQLRequest {
 	// {"query":"query ($erg: FindEventReceiverGroupInput!){event_receiver_groups(event_receiver_group: $erg) {id,name,type,version,description}}","variables":{"erg": {"name":"foobar","version":"1.0.0"}}}
 	template := `query ($obj: %s){%s(%s: $obj) {%s}}`
 	var query string
 	switch operation {
 	case eventsQuery:
-		query = fmt.Sprintf(template, findEventInputQuery, operation, eventQuery, strings.Join(fields, ","))
+		query = fmt.Sprintf(
+			template,
+			findEventInputQuery,
+			operation,
+			eventQuery,
+			strings.Join(fields, ","),
+		)
 	case eventReceiversQuery:
-		query = fmt.Sprintf(template, findEventReceiverInputQuery, operation, eventReceiverQuery, strings.Join(fields, ","))
+		query = fmt.Sprintf(
+			template,
+			findEventReceiverInputQuery,
+			operation,
+			eventReceiverQuery,
+			strings.Join(fields, ","),
+		)
 	case eventReceiverGroupsQuery:
-		query = fmt.Sprintf(template, findEventReceiverGroupInputQuery, operation, eventReceiverGroupQuery, strings.Join(fields, ","))
+		query = fmt.Sprintf(
+			template,
+			findEventReceiverGroupInputQuery,
+			operation,
+			eventReceiverGroupQuery,
+			strings.Join(fields, ","),
+		)
 	}
 	variables := map[string]interface{}{
 		"obj": params,
@@ -46,9 +68,19 @@ func NewGraphQLMutationRequest(operation string, params map[string]interface{}) 
 	case `create_event`:
 		query = fmt.Sprintf(template, createEventInputQuery, createEventQuery, eventQuery)
 	case `create_event_receiver`:
-		query = fmt.Sprintf(template, createEventReceiverInputQuery, createEventReceiverQuery, eventReceiverQuery)
+		query = fmt.Sprintf(
+			template,
+			createEventReceiverInputQuery,
+			createEventReceiverQuery,
+			eventReceiverQuery,
+		)
 	case `create_event_receiver_group`:
-		query = fmt.Sprintf(template, createEventReceiverGroupInputQuery, createEventReceiverGroupQuery, eventReceiverGroupQuery)
+		query = fmt.Sprintf(
+			template,
+			createEventReceiverGroupInputQuery,
+			createEventReceiverGroupQuery,
+			eventReceiverGroupQuery,
+		)
 	}
 	variables := map[string]interface{}{
 		"obj": params,
