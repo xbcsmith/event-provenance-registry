@@ -43,7 +43,7 @@ func New(host, user, pass, sslMode, database string, port int) (*Database, error
 		sslMode = fmt.Sprintf("sslmode=%s", sslMode)
 	}
 	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%d %v TimeZone=EST",
+		"host=%s user=%s password=%s dbname=%s port=%d %v TimeZone=America/New_York",
 		host,
 		user,
 		pass,
