@@ -11,8 +11,8 @@ Provenance Registry (EPR).
 
 ## Requirements
 
-The [Quickstart](../quickstart/README.md) has been completed and the EPR
-server is running.
+The [Quickstart](../quickstart/README.md) has been completed and the EPR server
+is running.
 
 ### Tools
 
@@ -26,18 +26,18 @@ server is running.
 Download the CycloneDX bom schema.
 
 ```bash
-curl -ssLO https://raw.githubusercontent.com/CycloneDX/specification/1.5/schema/bom-1.5.schema.json
+curl -ssLO https://raw.githubusercontent.com/CycloneDX/specification/1.6/schema/bom-1.6.schema.json
 ```
 
 ## Create a source SBOM event
 
-First we will create the event receiver and apply the CycloneDX v1.5 schema for
+First we will create the event receiver and apply the CycloneDX v1.6 schema for
 artifact sbom created.
 
 To make this easier we will create the JSON data we need to post first.
 
 ```bash
-echo "{\"name\": \"artifact-cyclonedx-sbom\",\"type\": \"build.artifact.cyclonedx.sbom\",\"version\": \"1.0.0\",\"description\": \"Artifact CycloneDX v1.5 SBOMs\",\"enabled\": true,\"schema\": $(cat bom-1.5.schema.json)}" | jq > er.json
+echo "{\"name\": \"artifact-cyclonedx-sbom\",\"type\": \"build.artifact.cyclonedx.sbom\",\"version\": \"1.0.0\",\"description\": \"Artifact CycloneDX v1.6 SBOMs\",\"enabled\": true,\"schema\": $(cat bom-1.6.schema.json)}" | jq > er.json
 ```
 
 Create the event receiver:
@@ -59,7 +59,7 @@ Create an SBOM to post.
 Run the following command at the root of the event-providence-registry checkout.
 
 ```bash
-cdxgen -o ./docs/tutorials/workshops/sboms/sbom.json --spec-version 1.5
+cdxgen -o ./docs/tutorials/workshops/sboms/sbom.json --spec-version 1.6
 ```
 
 Now we create the data for our event.

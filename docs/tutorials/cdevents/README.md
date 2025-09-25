@@ -11,13 +11,34 @@ Registry (EPR).
 
 ## Requirements
 
-The [Quickstart](../quickstart/README.md) has been completed and the EPR
-server is running.
+The [Quickstart](../quickstart/README.md) has been completed and the EPR server
+is running.
+
+## Setup
+
+In this section of the workshop we will need to create a few files and folders.
+
+To get started we will make a directory for the tutorial.
+
+```bash
+mkdir -p ./src/work
+cd ./src/work
+```
+
+## Event Receiver Schema
+
+Event receivers have a `schema` we can attach a JSON Schema object to as part of
+the creation process. Event receivers are required to have a schema. This schema
+plays a crucial role in validating the payload of events linked to the event
+receiver. Leveraging this feature allows us to guarantee that event payloads
+conforms to the expected data structure defined for that specific event
+receiver.
 
 ## Create the Event Receiver
 
 First we will create the event receiver and apply the cdevents schema for
-artifact packaged.
+artifact packaged event type. The schema is available at
+[this link](https://github.com/cdevents/spec/blob/main/schemas/artifactpackaged.json)
 
 Create the event receiver:
 
@@ -26,13 +47,14 @@ curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "name": "artifact-packaged",
-  "type": "dev.cdevents.artifact.packaged.0.1.1",
+  "type": "dev.cdevents.artifact.packaged.0.2.0",
   "version": "1.0.0",
   "description": "CDEvents Artifact Packaged",
   "enabled": true,
   "schema": {
+{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.4.0-draft/schema/artifact-packaged-event",
+  "$id": "https://cdevents.dev/0.4.1/schema/artifact-packaged-event",
   "properties": {
     "context": {
       "properties": {
@@ -52,13 +74,25 @@ curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
         "type": {
           "type": "string",
           "enum": [
-            "dev.cdevents.artifact.packaged.0.1.1"
+            "dev.cdevents.artifact.packaged.0.2.0"
           ],
-          "default": "dev.cdevents.artifact.packaged.0.1.1"
+          "default": "dev.cdevents.artifact.packaged.0.2.0"
         },
         "timestamp": {
           "type": "string",
           "format": "date-time"
+        },
+        "schemaUri": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri"
+        },
+        "chainId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "links": {
+          "$ref": "links/embeddedlinksarray"
         }
       },
       "additionalProperties": false,
@@ -109,6 +143,20 @@ curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
               "required": [
                 "id"
               ]
+            },
+            "sbom": {
+              "properties": {
+                "uri": {
+                  "type": "string",
+                  "minLength": 1,
+                  "format": "uri-reference"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "uri"
+              ]
             }
           },
           "additionalProperties": false,
@@ -148,6 +196,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
     "subject"
   ]
 }
+
 }'
 ```
 
@@ -177,7 +226,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
     "version": "0.4.0-draft",
     "id": "271069a8-fc18-44f1-b38f-9d70a1695819",
     "source": "/event/source/123",
-    "type": "dev.cdevents.artifact.packaged.0.1.1",
+    "type": "dev.cdevents.artifact.packaged.0.2.0",
     "timestamp": "2023-03-20T14:27:05.315384Z"
   },
   "subject": {
@@ -194,7 +243,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
 }
     ,
     "success": true,
-    "event_receiver_id": "01HFFDS17FA20PZRWR23KHPK9Y"
+    "event_receiver_id": "01HYKM1WBKMHF5DF6ZMDC30SY1"
 }'
 ```
 
@@ -276,7 +325,7 @@ func main() {
 
 // customMatcher matches a cdevent type
 func customMatcher(msg *message.Message) bool {
- return msg.Type == "dev.cdevents.artifact.packaged.0.1.1"
+ return msg.Type == "dev.cdevents.artifact.packaged.0.2.0"
 }
 
 func customTaskHandler(msg *message.Message) error {
@@ -313,7 +362,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
     "version": "0.4.0-draft",
     "id": "271069a8-fc18-44f1-b38f-9d70a1695819",
     "source": "/event/source/123",
-    "type": "dev.cdevents.artifact.packaged.0.1.1",
+    "type": "dev.cdevents.artifact.packaged.0.2.0",
     "timestamp": "2023-03-20T14:27:05.315384Z"
   },
   "subject": {
@@ -330,6 +379,6 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
 }
     ,
     "success": true,
-    "event_receiver_id": "01HFW5HXQR28951NR8NH3WJBN6"
+    "event_receiver_id": "01HYKM1WBKMHF5DF6ZMDC30SY1"
 }'
 ```
